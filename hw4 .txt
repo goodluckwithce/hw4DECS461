@@ -1,0 +1,124 @@
+---
+##
+## Customize this section with output formats
+##
+output:
+  pdf_document:
+    toc: yes
+    number_sections: yes
+  html_document:
+    toc: yes
+    number_section: true
+    df_print: paged
+geometry: 1.5in
+fontsize: 11pt    
+---
+
+```{r, include=FALSE}
+##
+## Customize this section with your name, course info, etc.
+##
+
+titlestring <- "Submission: Homework No. 4"
+myname <- "Conor McCaskey, Carmen Del Valle, Ce Xu"
+mydate <- format(Sys.Date(), '%B %d, %Y')
+mycourse <- "DECS-461: Data Exporation"
+myschool <- "Kellogg School of Management"
+myuniversity <- "Northwestern University"
+```
+
+---
+##
+## This chunk produces the titlepage and doc formatting
+##
+title: "`r titlestring`"
+subtitle: |
+   | `r mycourse`
+   | `r myschool`
+   | `r myuniversity`
+author: "`r myname`"
+date: "`r mydate`"
+## this allows you to customize margins in a pdf document
+geometry: 'top=1in,bottom=1in,left=1in,right=1in'
+urlcolor: 'red'
+---
+
+1 Regular expression searches
+1.1
+```{r setup, message=FALSE, echo=FALSE}
+library(babynames)
+length(unique(grep('^Jam.*es*$', babynames$name, value=TRUE)))
+length(unique(grep('^Jam.*es*', babynames$name, value=TRUE)))
+```
+The difference is because the first command only includes strings that begin with 'Jam' and end with 'es'
+While the second command count the number of strings beginning with "Jam" and containing the letters "es" in any order. 
+
+1.2
+```{r setup, message=FALSE, echo=FALSE}
+length(unique(grep('^I.*o*$', babynames$name, value=TRUE)))
+length(grep('^I.*o*$', babynames$name, value=TRUE))
+```
+
+1.3
+```{r setup, message=FALSE, echo=FALSE}
+nms <- c('John', 'Mary', 'James')
+paste0(nms, '$')
+
+paste0(nms, collapse='|')
+
+paste0(nms, '$', collapse='|')
+
+paste0('ˆ', nms, '$', collapse = '|' )
+
+```
+The commands above Concatenate Strings with different collapse signs. The collapse is an optional character string to separate the results. The paste0 is slightly more efficient than paste because it does not add any spaces or separators between the variables, whereas paste does.Additionally, paste0 is vectorized, meaning it can accept multiple variables at once, while paste is only able to accept one variable at a time.
+
+1.4
+```{r setup, message=FALSE, echo=FALSE}
+library(tidyverse)
+nms <- c('John', 'Mary', 'James')
+test1 <- babynames %>% filter(name %in% nms)
+test2 <- babynames %>%
+filter(grepl(paste0(nms, collapse='|'), name))
+test3 <- babynames %>%
+filter(grepl(paste0(nms, '$', collapse='|'), name))
+all.equal(test1, test3)
+dim(test1)
+dim(test2)
+```
+test1 returns 820 rows and test2 returns 9972 rows. test2 returns more rows because in the paste0 functions in test2 there is no "$" separate string.
+
+1.5
+```{r setup, message=FALSE, echo=FALSE}
+length(unique(grep('^*James*', babynames$name, value=TRUE)))
+length(unique(grep('^*John*', babynames$name, value=TRUE)))
+length(unique(grep('^*Mary*', babynames$name, value=TRUE)))
+
+length(grep('^*James*', babynames$name, value=TRUE))
+length(grep('^*John*', babynames$name, value=TRUE))
+length(grep('^*Mary*', babynames$name, value=TRUE))
+```
+
+1.6
+```{r setup, message=FALSE, echo=FALSE}
+length(unique(grep('^James.{0,1}$?', babynames$name, value=TRUE))) #at most 1
+length(unique(grep('^James.{0,2}$?', babynames$name, value=TRUE))) #at most 2
+```
+
+2 Kellogg Jobs Data
+2.1
+```{r setup, message=FALSE, echo=FALSE}
+jobs <- read_csv('data/kellogg_jobs_data_2ymba_2014-2016.csv')
+
+
+```
+
+
+3 NYC Flights
+3.1
+```{r setup, message=FALSE, echo=FALSE}
+library(nycflights13)
+table(nycflights13::flights[nycflights13::flights$month == 1, ]$origin)
+```
+
+3.2
